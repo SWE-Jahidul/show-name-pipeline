@@ -11,15 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Test SSH connection
         uses: appleboy/ssh-action@v0.1.9
         with:
-          host: ${{ secrets.SERVER_IP }}  
-          username: ${{ secrets.USER }} # your server username
-          key: ${{ secrets.PASSWORD }}   # your private SSH key
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}   # ✅ password এখানে
           port: 22
           script: |
             echo "SSH connection successful!"
+            whoami
