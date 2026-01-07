@@ -1,25 +1,25 @@
-name: Test SSH to Contabo
+name: Update PROD ENV on Server
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  workflow_dispatch: # allows manual trigger
 
 jobs:
-  test-ssh:
+  write-prod-env:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Test SSH connection
+      - name: Write PROD_ENV to server
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SERVER_IP }}
-          username: ${{ secrets.USER }} 
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
           port: 22
+          debug: true
           script: |
-            echo "SSH connection successful Again!"
+            # Write PROD_ENV secret to server
+            echo "${{ secrets.PROD_ENV }}" > /home/youruser/prod.env
+
+            # Verify: read file from server
+            echo "=== PROD_ENV content on server ==="
+            cat /home/youruser/prod.env
