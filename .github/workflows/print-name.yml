@@ -1,15 +1,22 @@
 name: Write & Read PROD_ENV
 
 on:
-  workflow_dispatch:   # manually trigger-able
+  push:
+    branches:
+      - main       # main branch এ push হলে auto run
+  workflow_dispatch:   # manual trigger-ও থাকবে
 
 jobs:
   prod-env:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Test SSH connection and write PROD_ENV
-      - name: Write PROD_ENV to server
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ SSH → write PROD_ENV to server and read it
+      - name: Write & Read PROD_ENV on server
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SERVER_IP }}
