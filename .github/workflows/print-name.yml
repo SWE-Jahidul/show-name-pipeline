@@ -1,19 +1,23 @@
-name: Show My Name
+name: Run on Contabo
 
-# When this workflow will run
 on:
   push:
     branches:
-      - main       # Runs when you push to main branch
-  workflow_dispatch: # Allows manual run from GitHub Actions tab
+      - main
+  workflow_dispatch:   # manual trigger from Actions tab
 
 jobs:
-  print-name:
-    runs-on: ubuntu-latest  # Use Ubuntu runner
-
+  run-on-server:
+    runs-on: ubuntu-latest  # GitHub runner just runs SSH, real work is on your server
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Print my name
-        run: echo "Jahid"
+      - name: Run command on Contabo server
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.SERVER_IP }}       # your Contabo server IP
+          username: ${{ secrets.SERVER_USER }} # your server username
+          key: ${{ secrets.SERVER_SSH_KEY }}   # your private SSH key stored in GitHub Secrets
+          port: 22
+          script: |
+            cd ~/show-name-pipeline
+            git pull origin main
+            echo "Jahid"
