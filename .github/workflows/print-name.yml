@@ -14,8 +14,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SERVER_IP }}       # your Contabo server IP
-          username: ${{ secrets.SERVER_USER }} # your server username
-          key: ${{ secrets.SERVER_SSH_KEY }}   # your private SSH key stored in GitHub Secrets
+          username: ${{ secrets.USER }} # your server username
+          key: ${{ secrets.SSH_PRIVATE_KEY }}   # your private SSH key stored in GitHub Secrets
           port: 22
           script: |
             cd ~/show-name-pipeline
