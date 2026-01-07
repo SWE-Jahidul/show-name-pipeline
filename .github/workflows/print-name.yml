@@ -18,8 +18,8 @@ jobs:
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SERVER_IP }}       # your Contabo IP
-          username: ${{ secrets.SERVER_USER }} # your server username
-          key: ${{ secrets.SERVER_SSH_KEY }}   # your private SSH key
+          username: ${{ secrets.USER }} # your server username
+          key: ${{ secrets.SSH_PRIVATE_KEY }}   # your private SSH key
           port: 22
           script: |
             echo "SSH connection successful!"
