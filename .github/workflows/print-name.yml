@@ -1,0 +1,19 @@
+name: Show My Name
+
+# When this workflow will run
+on:
+  push:
+    branches:
+      - main       # Runs when you push to main branch
+  workflow_dispatch: # Allows manual run from GitHub Actions tab
+
+jobs:
+  print-name:
+    runs-on: ubuntu-latest  # Use Ubuntu runner
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Print my name
+        run: echo "Jahid"
