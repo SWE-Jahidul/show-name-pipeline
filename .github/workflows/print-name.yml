@@ -1,4 +1,4 @@
-name: Write & Read PROD_ENV
+name: Write & Read PROD & STAGING ENV
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:   # manual trigger-ও থাকবে
 
 jobs:
-  prod-env:
+  envs:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,8 +15,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ SSH → write PROD_ENV to server and read it
-      - name: Write & Read PROD_ENV on server
+      # 2️⃣ SSH → write PROD_ENV and STAGING_ENV to server and read them
+      - name: Write & Read PROD + STAGING ENV on server
         uses: appleboy/ssh-action@v0.1.9
         with:
           host: ${{ secrets.SERVER_IP }}
@@ -24,10 +24,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Write PROD_ENV text to a file
+            # Write PROD_ENV
             echo "${{ secrets.PROD_ENV }}" > /home/${{ secrets.USER }}/prod_env.txt
             chmod 600 /home/${{ secrets.USER }}/prod_env.txt
 
-            # Read the file and echo value
+            # Write STAGING_ENV
+            echo "${{ secrets.STAGING_ENV }}" > /home/${{ secrets.USER }}/staging_env.txt
+            chmod 600 /home/${{ secrets.USER }}/staging_env.txt
+
+            # Read and echo PROD_ENV
             PROD_ENV_VALUE=$(cat /home/${{ secrets.USER }}/prod_env.txt)
             echo "✅ PROD_ENV on server: $PROD_ENV_VALUE"
+
+            # Read and echo STAGING_ENV
+            STAGING_ENV_VALUE=$(cat /home/${{ secrets.USER }}/staging_env.txt)
+            echo "✅ STAGING_ENV on server: $STAGING_ENV_VALUE"
