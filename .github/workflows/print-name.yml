@@ -1,19 +1,26 @@
-name: Show My Name
+name: Test SSH to Contabo
 
-# When this workflow will run
 on:
   push:
     branches:
-      - main       # Runs when you push to main branch
-  workflow_dispatch: # Allows manual run from GitHub Actions tab
+      - main
+  workflow_dispatch:
 
 jobs:
-  print-name:
-    runs-on: ubuntu-latest  # Use Ubuntu runner
+  test-ssh:
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Print my name
-        run: echo "Jahid"
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v0.1.9
+        with:
+          host: ${{ secrets.SERVER_IP }}       # your Contabo IP
+          username: ${{ secrets.SERVER_USER }} # your server username
+          key: ${{ secrets.SERVER_SSH_KEY }}   # your private SSH key
+          port: 22
+          script: |
+            echo "SSH connection successful!"
+            whoami
